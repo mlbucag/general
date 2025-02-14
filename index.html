@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flowers for You</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            text-align: center;
+            background: linear-gradient(to bottom, #ffdde1, #ffccd5);
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        h1 {
+            color: #b03554;
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: fadeIn 1.5s ease-in-out forwards;
+            text-shadow: 2px 2px 10px rgba(255, 163, 177, 0.3);
+            letter-spacing: 1.2px;
+        }
+
+        h2, .label {
+            color: #b03554;
+            font-size: 22px;
+            font-weight: 500;
+            opacity: 0;
+            animation: fadeInScale 3s ease-in-out forwards;
+            margin-top: 15px;
+            text-shadow: 1px 1px 8px rgba(255, 163, 177, 0.3);
+            letter-spacing: 1px;
+        }
+
+        .label {
+            font-size: 20px;
+            font-weight: 400;
+            margin-bottom: 10px;
+            animation-delay: 2s;
+        }
+
+        .flower {
+            width: 260px;
+            opacity: 0;
+            transform: translateY(30px) scale(0.8);
+            animation: fadeInScaleBounce 5s ease-out forwards 1.2s;
+        }
+
+        @keyframes shimmerGlow {
+            0%, 100% { filter: brightness(1); transform: scale(1); }
+            50% { filter: brightness(1.5) drop-shadow(0px 0px 15px rgba(255, 102, 120, 0.8)); transform: scale(1.08); }
+        }
+
+        .envelope-container {
+            position: relative;
+            margin-top: 20px;
+            cursor: pointer;
+            transition: transform 0.3s ease-in-out;
+            opacity: 0;
+            animation: fadeInScaleBounce 6s ease-out forwards 3s;
+        }
+
+        .envelope-container:hover {
+            transform: scale(1.05);
+        }
+
+        .envelope {
+            width: 130px;
+            transition: transform 0.5s ease-in-out;
+            animation: floatEnvelope 3s ease-in-out infinite;
+        }
+
+        .message-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            width: 280px;
+            background: rgba(255, 255, 255, 0.5);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 6px 12px rgba(255, 102, 120, 0.3);
+            backdrop-filter: blur(10px);
+            text-align: center;
+            font-size: 18px;
+            font-weight: 500;
+            color: #b03554;
+            opacity: 0;
+            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+        }
+
+        .open .envelope {
+            animation: openEnvelope 0.5s ease-out forwards;
+        }
+
+        .close .envelope {
+            animation: closeEnvelope 0.5s ease-out forwards;
+        }
+
+        .open .message-box {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+
+        .close .message-box {
+            transform: translate(-50%, -50%) scale(0);
+            opacity: 0;
+        }
+
+        .heart {
+            position: absolute;
+            color: #ff4d6d;
+            font-size: 22px;
+            bottom: 0;
+            animation: floatUp 5s linear infinite;
+            opacity: 0.8;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes fadeInScaleBounce {
+            0% { opacity: 0; transform: translateY(30px) scale(0.8); }
+            50% { opacity: 0.7; transform: translateY(-10px) scale(1.05); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes floatEnvelope {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        @keyframes openEnvelope {
+            from { transform: translateY(0) rotateX(0deg); }
+            to { transform: translateY(-20px) rotateX(30deg); }
+        }
+
+        @keyframes closeEnvelope {
+            from { transform: translateY(-20px) rotateX(30deg); }
+            to { transform: translateY(0) rotateX(0deg); }
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(-100vh); opacity: 0; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1 id="greeting">Happy Valentine's, Ellapot! ❤️</h1>
+
+    <div class="flower-container">
+        <h2 id="message">Flowers for you 🌸</h2>
+        <img src="flowers.png" class="flower" id="flower">
+    </div>
+
+    <div class="label">And also, a letter for you ✉️</div>
+
+    <div class="envelope-container" id="envelope-container">
+        <img src="envelope.png" class="envelope" id="envelope">
+        <div class="message-box" id="message-box">
+            "Hello, Ellapotpot! I Hope this makes you smile, and if not, edi wow hahaha. Anyways, bat pala ang tamlay mo sakin? tatampo ka? hehe sorry na, andito nako oh. Love youuu! ❤️"  
+        </div>
+    </div>
+
+    <script>
+    window.onload = function() {
+        const flower = document.getElementById('flower');
+        const flowerImage = new Image();
+        flowerImage.src = "flowers.png";
+
+        flowerImage.onload = function() {
+            flower.src = flowerImage.src;
+            
+            setTimeout(() => {
+                document.getElementById('message').style.opacity = 1;
+
+                setTimeout(() => {
+                    flower.style.opacity = 1;
+                    flower.style.transform = "translateY(0)";
+
+                    setInterval(() => {
+                        flower.style.animation = "shimmerGlow 2s ease-in-out";
+                        setTimeout(() => {
+                            flower.style.animation = "none";
+                        }, 2000);
+                    }, 4000);
+
+                    setInterval(createHeart, 800);
+                }, 800);
+            }, 800);
+        };
+    };
+
+    function createHeart() {
+        const heart = document.createElement("div");
+        heart.innerHTML = "❤️";
+        heart.classList.add("heart");
+        document.body.appendChild(heart);
+
+        const randomX = Math.random() * window.innerWidth;
+        heart.style.left = `${randomX}px`;
+
+        setTimeout(() => {
+            heart.remove();
+        }, 5000);
+    }
+
+    const envelopeContainer = document.getElementById("envelope-container");
+    envelopeContainer.addEventListener("click", function () {
+        if (this.classList.contains("open")) {
+            this.classList.remove("open");
+            this.classList.add("close");
+        } else {
+            this.classList.remove("close");
+            this.classList.add("open");
+        }
+    });
+</script>
+
+</body>
+</html>
